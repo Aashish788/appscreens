@@ -1,0 +1,7 @@
+{
+  "name": "ApexStore Engine",
+  "description": "Enterprise-grade AI-powered App Store screenshot generator featuring batch generation, 3D device mockups, and smart background extraction.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
