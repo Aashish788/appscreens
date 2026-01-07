@@ -12,6 +12,7 @@ import { INITIAL_SCREENSHOTS, DEVICES, Icons, DEFAULT_TITLE_STYLES, DEFAULT_SUBT
 import { analyzeScreenshot, generateAIBackground } from './services/geminiService';
 import * as htmlToImage from 'html-to-image';
 import JSZip from 'jszip';
+import { LandingPage } from './components/LandingPage';
 
 const INITIAL_STYLES: AppStyles = {
   primaryColor: '#00FF88',
@@ -75,6 +76,7 @@ const App: React.FC = () => {
     title: '',
   });
   const [showExportModal, setShowExportModal] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Toast notifications
   const { toasts, toast, removeToast } = useToast();
@@ -400,6 +402,10 @@ const App: React.FC = () => {
       setIsGeneratingBg(false);
     }
   };
+
+  if (!isLoggedIn) {
+    return <LandingPage onLogin={() => setIsLoggedIn(true)} />;
+  }
 
   return (
     <div className="flex h-screen w-full bg-obsidian text-slate-100 font-sans selection:bg-accent selection:text-obsidian overflow-hidden">
