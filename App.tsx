@@ -263,7 +263,7 @@ const App: React.FC = () => {
     const exportName = preset ? preset.name.replace(/\s+/g, '_') : 'Custom';
 
     const zip = new JSZip();
-    const folder = zip.folder(`Apex_Store_Assets_${exportName}_${quality.toUpperCase()}`);
+    const folder = zip.folder(`AppScreen_Assets_${exportName}_${quality.toUpperCase()}`);
 
     try {
       // 1. Capture Phase
@@ -315,7 +315,7 @@ const App: React.FC = () => {
 
       const link = document.createElement('a');
       link.href = URL.createObjectURL(content);
-      link.download = `Apex_Store_${exportName}_${quality.toUpperCase()}_${new Date().toISOString().split('T')[0]}.zip`;
+      link.download = `AppScreen_${exportName}_${quality.toUpperCase()}_${new Date().toISOString().split('T')[0]}.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -438,7 +438,7 @@ const App: React.FC = () => {
             <div className="w-40 h-40 rounded-full border-2 border-white/5 border-t-accent animate-spin" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-20 h-20 bg-accent/20 rounded-full animate-pulse blur-3xl" />
-              <div className="text-accent font-black text-xl tracking-tighter italic">APEX</div>
+              <div className="text-accent font-black text-xl tracking-tighter italic">APPSCREEN</div>
             </div>
           </div>
 
@@ -744,7 +744,7 @@ const App: React.FC = () => {
           <div className="bg-obsidian-light/95 backdrop-blur-3xl border border-white/10 rounded-full px-10 py-5 shadow-[0_40px_100px_rgba(0,0,0,0.9)] flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em]">
             <div className="flex items-center gap-3">
               <span className="text-white/20">ENGINE</span>
-              <span className="text-white">APEX_v5_PRO</span>
+              <span className="text-white">APPSCREEN_v5_PRO</span>
             </div>
             <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
             <div className="flex items-center gap-3">

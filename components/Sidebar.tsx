@@ -122,8 +122,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         <div className="relative">
           <h1 className="text-2xl font-black flex items-center gap-3 tracking-tighter">
-            <span className="text-accent italic drop-shadow-[0_0_20px_rgba(0,255,136,0.4)] animate-pulse">APEX</span>
-            <span className="text-white/90 bg-gradient-to-r from-white to-white/60 bg-clip-text">STORE</span>
+            <span className="text-accent italic drop-shadow-[0_0_20px_rgba(0,255,136,0.4)] animate-pulse">APP</span>
+            <span className="text-white/90 bg-gradient-to-r from-white to-white/60 bg-clip-text">SCREEN</span>
             <div className="w-2 h-2 rounded-full bg-accent animate-ping shadow-[0_0_15px_#00FF88]" />
           </h1>
           <p className="text-[10px] text-white/30 font-bold uppercase tracking-[0.25em] mt-1.5">

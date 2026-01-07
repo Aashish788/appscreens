@@ -1,4 +1,4 @@
-# 🚀 ApexStore Engine v5.0
+# 🚀 AppScreen Engine v5.0
 
 Enterprise-grade App Store screenshot generator with AI-powered backgrounds, premium templates, and professional 4K batch export.
 
@@ -74,7 +74,7 @@ API_KEY=your_google_ai_api_key
 ## 📁 Project Structure
 
 ```
-apexstore-engine/
+appscreen-engine/
 ├── components/
 │   ├── DeviceFrame.tsx      # Frame component with device mockup
 │   ├── Sidebar.tsx          # Design controls and templates

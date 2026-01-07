@@ -13,7 +13,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                 <div className="nav-content">
                     <div className="logo">
                         <div className="logo-icon"></div>
-                        <span>APEX STORE</span>
+                        <span>APPSCREEN</span>
                     </div>
                     <div className="nav-items text-xs font-bold tracking-widest uppercase opacity-60">
                         <a href="#features" className="hover:opacity-100 transition-opacity">Features</a>
@@ -31,11 +31,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                 <div className="hero-content">
                     <div className="badge animate-fade-in">Version 5.0 is Here</div>
                     <h1 className="hero-title animate-slide-up">
-                        Design for the <br /> <span className="text-gradient">Next Generation</span>
+                        Play Store & App Store <br /> <span className="text-gradient">Screenshot Generator</span>
                     </h1>
                     <p className="hero-subtitle animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                        Transform your app screenshots into high-fidelity marketing assets in seconds.
-                        Powered by neural rendering and professional grade automation. Built for teams that move fast.
+                        Create stunning, professional app screenshots for Play Store, App Store, Android, and iOS in seconds.
+                        Powered by neural rendering and 4K export. The world's best tool for app marketing assets.
                     </p>
                     <div className="hero-cta animate-slide-up" style={{ animationDelay: '0.2s' }}>
                         <button onClick={onLogin} className="primary-cta">
@@ -77,8 +77,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                 </div>
                 <div className="feature-card">
                     <div className="feature-icon">⚡</div>
-                    <h3>Batch Processing</h3>
-                    <p>Export dozens of localized screenshots at once in ultra-4K resolution with zero effort.</p>
+                    <h3>4K Batch Export</h3>
+                    <p>Export dozens of localized screenshots at once in ultra-4K resolution for Play Store and App Store with zero effort.</p>
+                </div>
+            </section>
+
+            {/* SEO Section - Visually minimal but great for search engines */}
+            <section className="seo-content py-20 px-6 max-w-7xl mx-auto opacity-80">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm">
+                    <div>
+                        <h2 className="text-xl font-bold mb-4 text-white">#1 Play Store & App Store Screenshot Maker</h2>
+                        <p className="mb-4">AppScreen is the most advanced screenshot generator for Android and iOS apps. Whether you need Google Play Store screenshots or Apple App Store marketing images, our engine provides the highest quality 4K renders with pixel-perfect device frames.</p>
+                        <ul className="space-y-2 opacity-70">
+                            <li>• iPhone 16 Pro & Pixel 9 Pro frames</li>
+                            <li>• Automated localization for international stores</li>
+                            <li>• AI-powered background generation</li>
+                            <li>• Custom device scaling and positioning</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-bold mb-4 text-white">Why Use a Screenshot Generator?</h2>
+                        <p className="mb-4">Converting visitors into users requires stunning visuals. Our tool helps you bypass expensive design agencies and complex software like Photoshop. Create professional iOS mockups and Android screenshots that drive more downloads and improve your app store ranking.</p>
+                        <ul className="space-y-2 opacity-70">
+                            <li>• 100% cloud-based, no installation needed</li>
+                            <li>• Dynamic text editing with custom fonts</li>
+                            <li>• Real-time preview of your app marketing assets</li>
+                            <li>• Free to use with premium 4K export options</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 
@@ -86,8 +112,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
             <footer className="footer">
                 <div className="footer-content">
                     <div className="footer-info">
-                        <div className="logo">APEX STORE</div>
-                        <p>© 2026 ApexStore Engine. All rights reserved.</p>
+                        <div className="logo">APPSCREEN</div>
+                        <p>© 2026 AppScreen Engine. All rights reserved.</p>
                     </div>
                     <div className="footer-links">
                         <div className="link-group">

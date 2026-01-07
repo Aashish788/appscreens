@@ -1,0 +1,21 @@
+{
+    "short_name": "AppScreen",
+    "name": "AppScreen: App Store Screenshot Generator",
+    "icons": [
+        {
+            "src": "favicon.ico",
+            "sizes": "64x64 32x32 24x24 16x16",
+            "type": "image/x-icon"
+        }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#00FF88",
+    "background_color": "#0B0B0C",
+    "description": "Professional 4K App Store & Play Store screenshot generator for iOS and Android.",
+    "categories": [
+        "design",
+        "productivity",
+        "utilities"
+    ]
+}
