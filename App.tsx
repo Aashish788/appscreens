@@ -55,7 +55,7 @@ const App: React.FC = () => {
     redo: redoScreenshots,
     canUndo,
     canRedo,
-  } = useHistory<ScreenshotSet[]>(INITIAL_SCREENSHOTS);
+  } = useHistory<ScreenshotSet[]>([]);
 
   const [styles, setStyles] = useState<AppStyles>(INITIAL_STYLES);
   const [selectedDevice, setSelectedDevice] = useState<DeviceType>('iphone16pro');
@@ -662,7 +662,7 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Panoramic Viewer with Enhanced Background */}
+        {/* Panoramic Viewer or Empty State */}
         <div
           className="flex-1 p-12 overflow-x-auto scrollbar-hide flex items-center bg-[radial-gradient(circle_at_50%_0%,_rgba(0,255,136,0.03)_0%,_transparent_60%)] relative"
           onClick={() => setSelectedFrameId(null)}
@@ -670,103 +670,129 @@ const App: React.FC = () => {
           {/* Decorative Grid Pattern */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
 
-          {/* Centered Container with Transform */}
-          <div
-            className="flex min-w-max m-auto items-center px-12 transition-transform duration-500 ease-out"
-            style={{
-              transform: `scale(${zoomLevel})`,
-              transformOrigin: 'center center',
-              gap: `${styles.frameGap}px`
-            }}
-          >
-            {screenshots.map((s, index) => (
-              <DeviceFrame
-                key={s.id}
-                index={index}
-                totalScreenshots={screenshots.length}
-                screenshot={s}
-                device={DEVICES.find(d => d.id === selectedDevice)!}
-                styles={styles}
-                onUpdate={(data) => handleUpdateScreenshot(s.id, data)}
-                onUpload={(e) => handleFileUpload(s.id, e)}
-                onDuplicate={() => duplicateScreen(s.id)}
-                onDelete={() => setDeleteConfirm({ isOpen: true, id: s.id, title: s.title })}
-                onMoveLeft={() => moveScreen(s.id, 'left')}
-                onMoveRight={() => moveScreen(s.id, 'right')}
-                canMoveLeft={index > 0}
-                canMoveRight={index < screenshots.length - 1}
-                isSelected={selectedFrameId === s.id}
-                onSelect={() => setSelectedFrameId(s.id)}
-                zoomLevel={1}
-                onUpdateSticker={(stickerId, updates) => {
-                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
-                    ...sc,
-                    stickers: sc.stickers?.map(st => st.id === stickerId ? { ...st, ...updates } : st)
-                  } : sc));
-                }}
-                onRemoveSticker={(stickerId) => {
-                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
-                    ...sc,
-                    stickers: sc.stickers?.filter(st => st.id !== stickerId)
-                  } : sc));
-                }}
-                onUpdateFloatingImage={(imageId, updates) => {
-                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
-                    ...sc,
-                    floatingImages: sc.floatingImages?.map(img => img.id === imageId ? { ...img, ...updates } : img)
-                  } : sc));
-                }}
-                onRemoveFloatingImage={(imageId) => {
-                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
-                    ...sc,
-                    floatingImages: sc.floatingImages?.filter(img => img.id !== imageId)
-                  } : sc));
-                }}
-                onUpdateFloatingText={(textId, updates) => {
-                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
-                    ...sc,
-                    floatingTexts: sc.floatingTexts?.map(txt => txt.id === textId ? { ...txt, ...updates } : txt)
-                  } : sc));
-                }}
-                onRemoveFloatingText={(textId) => {
-                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
-                    ...sc,
-                    floatingTexts: sc.floatingTexts?.filter(txt => txt.id !== textId)
-                  } : sc));
-                }}
-              />
-            ))}
-          </div>
+          {screenshots.length > 0 ? (
+            /* Centered Container with Transform */
+            <div
+              className="flex min-w-max m-auto items-center px-12 transition-transform duration-500 ease-out"
+              style={{
+                transform: `scale(${zoomLevel})`,
+                transformOrigin: 'center center',
+                gap: `${styles.frameGap}px`
+              }}
+            >
+              {screenshots.map((s, index) => (
+                <DeviceFrame
+                  key={s.id}
+                  index={index}
+                  totalScreenshots={screenshots.length}
+                  screenshot={s}
+                  device={DEVICES.find(d => d.id === selectedDevice)!}
+                  styles={styles}
+                  onUpdate={(data) => handleUpdateScreenshot(s.id, data)}
+                  onUpload={(e) => handleFileUpload(s.id, e)}
+                  onDuplicate={() => duplicateScreen(s.id)}
+                  onDelete={() => setDeleteConfirm({ isOpen: true, id: s.id, title: s.title })}
+                  onMoveLeft={() => moveScreen(s.id, 'left')}
+                  onMoveRight={() => moveScreen(s.id, 'right')}
+                  canMoveLeft={index > 0}
+                  canMoveRight={index < screenshots.length - 1}
+                  isSelected={selectedFrameId === s.id}
+                  onSelect={() => setSelectedFrameId(s.id)}
+                  zoomLevel={1}
+                  onUpdateSticker={(stickerId, updates) => {
+                    setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                      ...sc,
+                      stickers: sc.stickers?.map(st => st.id === stickerId ? { ...st, ...updates } : st)
+                    } : sc));
+                  }}
+                  onRemoveSticker={(stickerId) => {
+                    setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                      ...sc,
+                      stickers: sc.stickers?.filter(st => st.id !== stickerId)
+                    } : sc));
+                  }}
+                  onUpdateFloatingImage={(imageId, updates) => {
+                    setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                      ...sc,
+                      floatingImages: sc.floatingImages?.map(img => img.id === imageId ? { ...img, ...updates } : img)
+                    } : sc));
+                  }}
+                  onRemoveFloatingImage={(imageId) => {
+                    setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                      ...sc,
+                      floatingImages: sc.floatingImages?.filter(img => img.id !== imageId)
+                    } : sc));
+                  }}
+                  onUpdateFloatingText={(textId, updates) => {
+                    setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                      ...sc,
+                      floatingTexts: sc.floatingTexts?.map(txt => txt.id === textId ? { ...txt, ...updates } : txt)
+                    } : sc));
+                  }}
+                  onRemoveFloatingText={(textId) => {
+                    setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                      ...sc,
+                      floatingTexts: sc.floatingTexts?.filter(txt => txt.id !== textId)
+                    } : sc));
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="m-auto flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-1000">
+              <div className="mb-8 relative group">
+                <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center relative backdrop-blur-3xl transition-all duration-500 group-hover:border-accent/50">
+                  <Icons.Plus className="w-8 h-8 text-white/20 group-hover:text-accent transition-colors duration-500" />
+                </div>
+              </div>
+
+              <h2 className="text-3xl font-bold tracking-tight mb-2 text-white/90">
+                Start your design
+              </h2>
+              <p className="text-white/30 text-sm max-w-[280px] mx-auto mb-8 leading-relaxed">
+                Add a frame to begin crafting your app screenshots.
+              </p>
+
+              <button
+                onClick={addScreen}
+                className="group px-8 py-3.5 bg-white text-obsidian rounded-xl text-xs font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-2xl"
+              >
+                Add First Frame
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Floating Controls Overlay - Enhanced */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-40">
-          <div className="bg-obsidian-light/95 backdrop-blur-3xl border border-white/10 rounded-full px-10 py-5 shadow-[0_40px_100px_rgba(0,0,0,0.9)] flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em]">
-            <div className="flex items-center gap-3">
-              <span className="text-white/20">ENGINE</span>
-              <span className="text-white">APPSCREEN_v5_PRO</span>
+        {screenshots.length > 0 && (
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-40">
+            <div className="bg-obsidian-light/95 backdrop-blur-3xl border border-white/10 rounded-full px-10 py-5 shadow-[0_40px_100px_rgba(0,0,0,0.9)] flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em]">
+              <div className="flex items-center gap-3">
+                <span className="text-white/20">ENGINE</span>
+                <span className="text-white">APPSCREEN_v5_PRO</span>
+              </div>
+              <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
+              <div className="flex items-center gap-3">
+                <span className="text-white/20">SCENE</span>
+                <span className="text-accent underline cursor-pointer">{styles.backgroundType === 'ai-generated' ? 'NEURAL_ACTIVE' : 'STATIC'}</span>
+              </div>
+              <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
+              <div className="flex items-center gap-3">
+                <span className="text-white/20">ZOOM</span>
+                <span className="text-white">{Math.round(zoomLevel * 100)}%</span>
+              </div>
+              <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
+              <button
+                onClick={handleExportBatch}
+                disabled={isExporting}
+                className="group flex items-center gap-3 text-accent hover:text-white transition-all disabled:opacity-50"
+              >
+                <Icons.ArrowDownTray />
+                {isExporting ? 'EXPORTING...' : 'EXPORT_4K_ZIP'}
+              </button>
             </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
-            <div className="flex items-center gap-3">
-              <span className="text-white/20">SCENE</span>
-              <span className="text-accent underline cursor-pointer">{styles.backgroundType === 'ai-generated' ? 'NEURAL_ACTIVE' : 'STATIC'}</span>
-            </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
-            <div className="flex items-center gap-3">
-              <span className="text-white/20">ZOOM</span>
-              <span className="text-white">{Math.round(zoomLevel * 100)}%</span>
-            </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
-            <button
-              onClick={handleExportBatch}
-              disabled={isExporting}
-              className="group flex items-center gap-3 text-accent hover:text-white transition-all disabled:opacity-50"
-            >
-              <Icons.ArrowDownTray />
-              {isExporting ? 'EXPORTING...' : 'EXPORT_4K_ZIP'}
-            </button>
           </div>
-        </div>
+        )}
 
         {/* Keyboard Shortcut Hint */}
         <button
