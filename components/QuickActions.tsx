@@ -29,6 +29,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         border border-white/10 rounded-2xl
         shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)]
         transition-all duration-300 ease-out
+        no-export
         ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95 pointer-events-none'}
       `}
         >

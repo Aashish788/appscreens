@@ -12,13 +12,13 @@ interface InlineTextEditorProps {
 
 const FONT_FAMILIES = [
     { name: 'Inter', value: 'Inter, sans-serif' },
-    { name: 'Roboto', value: 'Roboto, sans-serif' },
+    { name: 'Outfit', value: 'Outfit, sans-serif' },
+    { name: 'Jakarta', value: 'Plus Jakarta Sans, sans-serif' },
     { name: 'Poppins', value: 'Poppins, sans-serif' },
     { name: 'Montserrat', value: 'Montserrat, sans-serif' },
-    { name: 'Oswald', value: 'Oswald, sans-serif' },
-    { name: 'Bebas', value: 'Bebas Neue, cursive' },
-    { name: 'Playfair', value: 'Playfair Display, serif' },
     { name: 'Space', value: 'Space Grotesk, sans-serif' },
+    { name: 'Playfair', value: 'Playfair Display, serif' },
+    { name: 'JetBrains', value: 'JetBrains Mono, monospace' },
 ];
 
 const FONT_WEIGHTS = [

@@ -5,7 +5,7 @@ import { DeviceMetadata, Template } from './types';
 export const DEVICES: DeviceMetadata[] = [
   { id: 'iphone16pro', name: 'iPhone 16 Pro', width: 1179, height: 2556, aspectRatio: '9:19.5', platform: 'ios' },
   { id: 'iphone16promax', name: 'iPhone 16 Pro Max', width: 1290, height: 2796, aspectRatio: '9:19.5', platform: 'ios' },
-  { id: 'ipadpro', name: 'iPad Pro 12.9"', width: 2048, height: 2732, aspectRatio: '4:3', platform: 'ios' },
+  { id: 'ipadpro', name: 'iPad Pro 12.9"', width: 2048, height: 2732, aspectRatio: '3:4', platform: 'ios' },
   { id: 'pixel9pro', name: 'Pixel 9 Pro', width: 1344, height: 2992, aspectRatio: '9:20', platform: 'android' },
 ];
 
@@ -61,6 +61,48 @@ export const TEMPLATES: Template[] = [
     category: 'Fintech',
     previewColor: '#0A0A0B',
     styles: { primaryColor: '#0A0A0B', secondaryColor: '#2D3748', backgroundType: 'mesh', textAlign: 'center', deviceColor: 'titanium', deviceTilt: 0, deviceScale: 0.92, showDecorations: true, shadowIntensity: 'heavy', borderAccent: true }
+  },
+  {
+    id: 'khatabook-core-blue',
+    name: 'Core Blue',
+    category: 'Fintech',
+    previewColor: '#1073E1',
+    styles: { primaryColor: '#1073E1', secondaryColor: '#0D5FBA', backgroundType: 'solid', textAlign: 'left', deviceColor: 'silver', deviceTilt: 0, deviceScale: 0.9, shadowIntensity: 'soft' }
+  },
+  {
+    id: 'khatabook-sky-blue',
+    name: 'Sky Blue',
+    category: 'Fintech',
+    previewColor: '#2196F3',
+    styles: { primaryColor: '#2196F3', secondaryColor: '#1976D2', backgroundType: 'solid', textAlign: 'left', deviceColor: 'black', deviceTilt: 0, deviceScale: 0.9, shadowIntensity: 'soft' }
+  },
+  {
+    id: 'khatabook-deep-indigo',
+    name: 'Deep Indigo',
+    category: 'Fintech',
+    previewColor: '#673AB7',
+    styles: { primaryColor: '#673AB7', secondaryColor: '#512DA8', backgroundType: 'solid', textAlign: 'left', deviceColor: 'black', deviceTilt: 0, deviceScale: 0.9, shadowIntensity: 'soft' }
+  },
+  {
+    id: 'khatabook-royal-purple',
+    name: 'Royal Purple',
+    category: 'Fintech',
+    previewColor: '#5E35B1',
+    styles: { primaryColor: '#5E35B1', secondaryColor: '#4527A0', backgroundType: 'solid', textAlign: 'left', deviceColor: 'silver', deviceTilt: 0, deviceScale: 0.9, shadowIntensity: 'soft' }
+  },
+  {
+    id: 'khatabook-berry-pink',
+    name: 'Berry Pink',
+    category: 'Fintech',
+    previewColor: '#E91E63',
+    styles: { primaryColor: '#E91E63', secondaryColor: '#C2185B', backgroundType: 'solid', textAlign: 'left', deviceColor: 'silver', deviceTilt: 0, deviceScale: 0.9, shadowIntensity: 'soft' }
+  },
+  {
+    id: 'khatabook-ocean-blue',
+    name: 'Ocean Blue',
+    category: 'Fintech',
+    previewColor: '#0288D1',
+    styles: { primaryColor: '#0288D1', secondaryColor: '#0277BD', backgroundType: 'solid', textAlign: 'left', deviceColor: 'black', deviceTilt: 0, deviceScale: 0.9, shadowIntensity: 'soft' }
   },
   {
     id: 'monzo-coral',
@@ -265,10 +307,9 @@ export const Icons = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-3.447c.102-.62-.435-1.189-1.057-1.139l-3.456.281 2.223-2.511m3.231 4.59L18.903 20.2M5.898 6.961L4.541 1.89m0 0l-2.51 2.225.569-3.447c.102-.62-.435-1.189-1.057-1.139l-3.456.281 2.223-2.511m3.231 4.59L9.761 5.489" />
     </svg>
   ),
-  Eye: () => (
+  Search: () => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.644C3.399 8.044 7.433 5 12 5c4.567 0 8.57 3.044 9.964 6.678.07.183.07.384 0 .568C20.567 15.956 16.567 19 12 19c-4.567 0-8.57-3.044-9.964-6.678z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
     </svg>
   ),
 };

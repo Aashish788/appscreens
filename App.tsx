@@ -5,6 +5,7 @@ import { ToastContainer, useToast } from './components/Toast';
 import { KeyboardShortcuts, useKeyboardShortcuts } from './components/KeyboardShortcuts';
 import { ZoomControls } from './components/ZoomControls';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
+import { ExportSizeModal, ExportPreset } from './components/ExportSizeModal';
 import { useHistory } from './hooks/useHistory';
 import { AppStyles, DeviceType, ScreenshotSet, Template } from './types';
 import { INITIAL_SCREENSHOTS, DEVICES, Icons, DEFAULT_TITLE_STYLES, DEFAULT_SUBTITLE_STYLES } from './constants';
@@ -23,6 +24,8 @@ const INITIAL_STYLES: AppStyles = {
   deviceRotation: 0,
   deviceScale: 1,
   deviceVerticalPosition: 0,
+  deviceHorizontalPosition: 0,
+  frameRotation: 0,
   showShadows: true,
   textAlign: 'center',
   deviceColor: 'black',
@@ -31,7 +34,15 @@ const INITIAL_STYLES: AppStyles = {
   showDecorations: true,
   shadowIntensity: 'heavy',
   layoutDensity: 'airy',
-  showDevice: true
+  showDevice: true,
+  noiseOpacity: 0.05,
+  glassBlur: 20,
+  reflectionOpacity: 0.3,
+  backgroundPattern: 'none',
+  frameGap: 80,
+  interactiveTilt: true,
+  showFloatingShapes: false,
+  meshAnimationSpeed: 50
 };
 
 const App: React.FC = () => {
@@ -63,6 +74,7 @@ const App: React.FC = () => {
     id: null,
     title: '',
   });
+  const [showExportModal, setShowExportModal] = useState(false);
 
   // Toast notifications
   const { toasts, toast, removeToast } = useToast();
@@ -193,22 +205,63 @@ const App: React.FC = () => {
   });
 
   const applyTemplate = useCallback((template: Template) => {
-    setStyles(prev => ({
-      ...prev,
-      ...template.styles,
-      backgroundImage: undefined,
-    }));
-    toast.success(`Applied "${template.name}" template`);
-  }, [toast]);
+    if (selectedFrameId) {
+      setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? { ...s, styles: { ...s.styles, ...template.styles } } : s));
+    } else {
+      setStyles(prev => ({
+        ...prev,
+        ...template.styles,
+        backgroundImage: undefined,
+      }));
+    }
+    toast.success(`Applied "${template.name}" template ${selectedFrameId ? 'to selected frame' : 'globally'}`);
+  }, [selectedFrameId, setScreenshots, toast]);
 
-  async function handleExportBatch() {
+  // Open export modal instead of direct export
+  function handleExportBatch() {
+    setShowExportModal(true);
+  }
+
+  // Actual export function with size options
+  async function executeExport(
+    preset: ExportPreset | null,
+    customWidth?: number,
+    customHeight?: number,
+    quality: 'standard' | 'high' | 'ultra' = 'high'
+  ) {
     if (isExporting) return;
+    setShowExportModal(false);
     setIsExporting(true);
     setExportPhase('capturing');
     setExportProgress({ current: 0, total: screenshots.length });
 
+    // Determine target dimensions and device
+    const targetWidth = preset ? preset.width : (customWidth || 1080);
+    const targetHeight = preset ? preset.height : (customHeight || 1920);
+    const targetDevice = preset?.deviceType as DeviceType || selectedDevice;
+    const originalDevice = selectedDevice;
+
+    // Temporarily switch device if needed
+    if (targetDevice !== originalDevice) {
+      setSelectedDevice(targetDevice);
+      // Wait for re-render and style calculations
+      await new Promise(resolve => setTimeout(resolve, 800));
+    }
+
+    // Determine pixel ratio based on quality
+    const getPixelRatio = () => {
+      switch (quality) {
+        case 'standard': return 2;
+        case 'high': return 3;
+        case 'ultra': return 4;
+      }
+    };
+
+    const pixelRatio = getPixelRatio();
+    const exportName = preset ? preset.name.replace(/\s+/g, '_') : 'Custom';
+
     const zip = new JSZip();
-    const folder = zip.folder(`Apex_Store_Assets_${selectedDevice}`);
+    const folder = zip.folder(`Apex_Store_Assets_${exportName}_${quality.toUpperCase()}`);
 
     try {
       // 1. Capture Phase
@@ -218,15 +271,34 @@ const App: React.FC = () => {
 
         if (element) {
           // Extra wait to ensure all transitions/styles are settled
-          await new Promise(resolve => setTimeout(resolve, 300));
+          await new Promise(resolve => setTimeout(resolve, 500));
 
-          // High-Fidelity 4K capture (pixelRatio: 4)
-          const blob = await htmlToImage.toBlob(element, {
-            pixelRatio: 4,
+          // Calculate scaling to fit target dimensions while maintaining aspect ratio or following user request
+          const elementRect = element.getBoundingClientRect();
+          const scaleX = targetWidth / elementRect.width;
+          const scaleY = targetHeight / elementRect.height;
+
+          // Use the target dimensions directly in the export
+          const exportOptions: any = {
+            width: targetWidth,
+            height: targetHeight,
+            style: {
+              transform: `scale(${Math.max(scaleX, scaleY)})`,
+              transformOrigin: 'top left',
+            },
+            pixelRatio: 1, // We control scaling ourselves for better precision
             cacheBust: true,
             quality: 1.0,
             skipFonts: false,
-          });
+            filter: (node: any) => {
+              if (node.classList && node.classList.contains('no-export')) {
+                return false;
+              }
+              return true;
+            },
+          };
+
+          const blob = await htmlToImage.toBlob(element, exportOptions);
 
           if (blob && folder) {
             const fileName = `0${i + 1}_${screenshots[i].title.toLowerCase().replace(/\s+/g, '_') || 'asset'}.png`;
@@ -241,17 +313,21 @@ const App: React.FC = () => {
 
       const link = document.createElement('a');
       link.href = URL.createObjectURL(content);
-      link.download = `Apex_Store_Batch_${new Date().toISOString().split('T')[0]}.zip`;
+      link.download = `Apex_Store_${exportName}_${quality.toUpperCase()}_${new Date().toISOString().split('T')[0]}.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
 
-      toast.success(`Exported ${screenshots.length} frames successfully!`);
+      toast.success(`Exported ${screenshots.length} frames at ${targetWidth}×${targetHeight} (${quality.toUpperCase()})!`);
     } catch (err) {
       console.error("Export failed:", err);
       toast.error("Export failed. Please try again.");
     } finally {
+      // Revert device if it was changed
+      if (targetDevice !== originalDevice) {
+        setSelectedDevice(originalDevice);
+      }
       setIsExporting(false);
     }
   }
@@ -307,11 +383,15 @@ const App: React.FC = () => {
     setIsGeneratingBg(true);
     try {
       const imageUrl = await generateAIBackground(prompt);
-      setStyles(prev => ({
-        ...prev,
-        backgroundImage: imageUrl,
-        backgroundType: 'ai-generated'
-      }));
+      if (selectedFrameId) {
+        setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? { ...s, styles: { ...s.styles, backgroundImage: imageUrl, backgroundType: 'ai-generated' } } : s));
+      } else {
+        setStyles(prev => ({
+          ...prev,
+          backgroundImage: imageUrl,
+          backgroundType: 'ai-generated'
+        }));
+      }
       toast.success("Background generated!");
     } catch (error: any) {
       console.error("BG Gen failed:", error);
@@ -337,6 +417,13 @@ const App: React.FC = () => {
         title={deleteConfirm.title}
       />
 
+      {/* Export Size Selection Modal */}
+      <ExportSizeModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={executeExport}
+        isExporting={isExporting}
+      />
 
       {/* Neural & Export Processing Overlay */}
       {(isAnalyzing || isGeneratingBg || isExporting) && (
@@ -386,8 +473,19 @@ const App: React.FC = () => {
       )}
 
       <Sidebar
-        styles={styles}
-        setStyles={setStyles}
+        styles={selectedFrameId ? { ...styles, ...(screenshots.find(s => s.id === selectedFrameId)?.styles || {}) } : styles}
+        setStyles={(newStyles) => {
+          if (selectedFrameId) {
+            // Only store the local styles that are actually passed in or modified
+            // This allows the frame to still inherit other global styles
+            setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? {
+              ...s,
+              styles: { ...(s.styles || {}), ...newStyles }
+            } : s));
+          } else {
+            setStyles(newStyles);
+          }
+        }}
         selectedDevice={selectedDevice}
         setSelectedDevice={setSelectedDevice}
         onAnalyze={runAIAnalysis}
@@ -401,6 +499,107 @@ const App: React.FC = () => {
         canRedo={canRedo}
         onUndo={undoScreenshots}
         onRedo={redoScreenshots}
+        editingFrameId={selectedFrameId}
+        selectedScreenshot={screenshots.find(s => s.id === selectedFrameId)}
+        onResetFrameStyles={() => {
+          if (selectedFrameId) {
+            setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? { ...s, styles: {} } : s));
+            setSelectedFrameId(null); // Clear selection to show reset effect
+            toast.info("Frame reset to global theme");
+          }
+        }}
+        onAddSticker={(url) => {
+          if (selectedFrameId) {
+            setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? {
+              ...s,
+              stickers: [...(s.stickers || []), {
+                id: Math.random().toString(36).substr(2, 9),
+                url,
+                x: 50,
+                y: 50,
+                scale: 0.5,
+                rotation: 0,
+                opacity: 1
+              }]
+            } : s));
+            toast.success("Design element added");
+          } else {
+            toast.info("Select a frame first");
+          }
+        }}
+        onToggleDevice={(hide) => {
+          if (selectedFrameId) {
+            setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? {
+              ...s,
+              hideDevice: hide
+            } : s));
+          }
+        }}
+        onAddFloatingImage={(url) => {
+          if (selectedFrameId) {
+            setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? {
+              ...s,
+              floatingImages: [...(s.floatingImages || []), {
+                id: Math.random().toString(36).substr(2, 9),
+                url,
+                x: 20,
+                y: 30,
+                width: 30,
+                height: 30,
+                rotation: 0,
+                opacity: 1,
+                zIndex: (s.floatingImages?.length || 0) + 1
+              }]
+            } : s));
+            toast.success("Floating image added");
+          }
+        }}
+        onAddFloatingText={() => {
+          if (selectedFrameId) {
+            setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? {
+              ...s,
+              floatingTexts: [...(s.floatingTexts || []), {
+                id: Math.random().toString(36).substr(2, 9),
+                content: 'New Text',
+                x: 10,
+                y: 50,
+                fontSize: 24,
+                fontFamily: 'Inter',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                rotation: 0,
+                opacity: 1,
+                textAlign: 'left',
+                zIndex: (s.floatingTexts?.length || 0) + 1
+              }]
+            } : s));
+            toast.success("Text element added");
+          }
+        }}
+        onUpdateFloatingText={(textId, updates) => {
+          if (selectedFrameId) {
+            setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? {
+              ...s,
+              floatingTexts: s.floatingTexts?.map(t => t.id === textId ? { ...t, ...updates } : t)
+            } : s));
+          }
+        }}
+        onRemoveFloatingText={(textId) => {
+          if (selectedFrameId) {
+            setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? {
+              ...s,
+              floatingTexts: s.floatingTexts?.filter(t => t.id !== textId)
+            } : s));
+          }
+        }}
+        onRemoveFloatingImage={(imageId) => {
+          if (selectedFrameId) {
+            setScreenshots(prev => prev.map(s => s.id === selectedFrameId ? {
+              ...s,
+              floatingImages: s.floatingImages?.filter(img => img.id !== imageId)
+            } : s));
+          }
+        }}
       />
 
       <main className="flex-1 overflow-hidden bg-[#050505] relative flex flex-col">
@@ -467,8 +666,12 @@ const App: React.FC = () => {
 
           {/* Centered Container with Transform */}
           <div
-            className="flex gap-20 min-w-max mx-auto items-center px-[400px] transition-transform duration-500 ease-out"
-            style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'center center' }}
+            className="flex min-w-max m-auto items-center px-12 transition-transform duration-500 ease-out"
+            style={{
+              transform: `scale(${zoomLevel})`,
+              transformOrigin: 'center center',
+              gap: `${styles.frameGap}px`
+            }}
           >
             {screenshots.map((s, index) => (
               <DeviceFrame
@@ -489,6 +692,42 @@ const App: React.FC = () => {
                 isSelected={selectedFrameId === s.id}
                 onSelect={() => setSelectedFrameId(s.id)}
                 zoomLevel={1}
+                onUpdateSticker={(stickerId, updates) => {
+                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                    ...sc,
+                    stickers: sc.stickers?.map(st => st.id === stickerId ? { ...st, ...updates } : st)
+                  } : sc));
+                }}
+                onRemoveSticker={(stickerId) => {
+                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                    ...sc,
+                    stickers: sc.stickers?.filter(st => st.id !== stickerId)
+                  } : sc));
+                }}
+                onUpdateFloatingImage={(imageId, updates) => {
+                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                    ...sc,
+                    floatingImages: sc.floatingImages?.map(img => img.id === imageId ? { ...img, ...updates } : img)
+                  } : sc));
+                }}
+                onRemoveFloatingImage={(imageId) => {
+                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                    ...sc,
+                    floatingImages: sc.floatingImages?.filter(img => img.id !== imageId)
+                  } : sc));
+                }}
+                onUpdateFloatingText={(textId, updates) => {
+                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                    ...sc,
+                    floatingTexts: sc.floatingTexts?.map(txt => txt.id === textId ? { ...txt, ...updates } : txt)
+                  } : sc));
+                }}
+                onRemoveFloatingText={(textId) => {
+                  setScreenshots(prev => prev.map(sc => sc.id === s.id ? {
+                    ...sc,
+                    floatingTexts: sc.floatingTexts?.filter(txt => txt.id !== textId)
+                  } : sc));
+                }}
               />
             ))}
           </div>
