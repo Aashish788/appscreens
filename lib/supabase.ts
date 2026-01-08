@@ -8,11 +8,11 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
+    const errorMsg = '❌ Supabase credentials missing! Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your environment variables.';
     if (import.meta.env.DEV) {
-        console.error(
-            '❌ Supabase credentials missing! check your .env.local file.\n' +
-            'You need VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.'
-        );
+        console.error(errorMsg + ' Check your .env.local file.');
+    } else {
+        console.error(errorMsg + ' Check your hosting dashboard environment variables.');
     }
 }
 
