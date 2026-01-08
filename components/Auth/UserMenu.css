@@ -64,6 +64,17 @@
     z-index: 99999;
 }
 
+@media (max-width: 480px) {
+    .user-menu-dropdown-compact {
+        position: fixed;
+        top: 70px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+        max-width: none;
+    }
+}
+
 @keyframes dropdownFadeIn {
     from {
         opacity: 0;

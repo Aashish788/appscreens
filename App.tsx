@@ -80,6 +80,7 @@ const App: React.FC = () => {
   });
   const [showExportModal, setShowExportModal] = useState(false);
   const [showAuthPage, setShowAuthPage] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Supabase Auth
   const { user, loading: authLoading, signOut } = useAuth();
@@ -503,6 +504,8 @@ const App: React.FC = () => {
       )}
 
       <Sidebar
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
         styles={selectedFrameId ? { ...styles, ...(screenshots.find(s => s.id === selectedFrameId)?.styles || {}) } : styles}
         setStyles={(newStyles) => {
           if (selectedFrameId) {
@@ -634,34 +637,42 @@ const App: React.FC = () => {
 
       <main className="flex-1 overflow-hidden bg-[#050505] relative flex flex-col">
         {/* Top Navigation - Enhanced with Glassmorphism */}
-        <div className="h-20 px-8 flex items-center justify-between border-b border-white/5 bg-obsidian/80 backdrop-blur-3xl z-40">
-          <div className="flex items-center gap-10">
+        <div className="h-16 md:h-20 px-4 md:px-8 flex items-center justify-between border-b border-white/5 bg-obsidian/80 backdrop-blur-3xl z-40">
+          <div className="flex items-center gap-4 md:gap-10">
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 -ml-2 text-white/40 hover:text-accent md:hidden transition-colors"
+            >
+              {isMobileMenuOpen ? <Icons.X className="w-6 h-6" /> : <Icons.Menu className="w-6 h-6" />}
+            </button>
+
             <div className="flex flex-col">
-              <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-0.5">Automated Asset Pipeline</span>
+              <span className="hidden sm:block text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-0.5">Automated Asset Pipeline</span>
               <span className="text-sm font-black flex items-center gap-2 tracking-tighter">
                 BATCH_ENGINE_v5.0
                 <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shadow-[0_0_10px_#00FF88]" />
               </span>
             </div>
-            <div className="h-10 w-px bg-white/5" />
+            <div className="hidden md:block h-10 w-px bg-white/5" />
 
-            {/* Locale Selector with Glassmorphism */}
-            <div className="flex bg-white/5 backdrop-blur-xl p-1.5 rounded-xl border border-white/10 shadow-inner">
+            {/* Locale Selector with Glassmorphism - Hidden on small mobile */}
+            <div className="hidden sm:flex bg-white/5 backdrop-blur-xl p-1.5 rounded-xl border border-white/10 shadow-inner">
               {['EN', 'DE', 'FR', 'JP'].map((lang) => (
                 <button
                   key={lang}
                   onClick={() => setActiveLocale(lang.toLowerCase())}
-                  className={`px-6 py-2 rounded-lg text-xs font-black transition-all duration-300 ${activeLocale === lang.toLowerCase() ? 'bg-white/10 text-accent shadow-[0_0_15px_rgba(0,255,136,0.2)]' : 'text-white/20 hover:text-white/40'}`}
+                  className={`px-3 md:px-6 py-2 rounded-lg text-[10px] md:text-xs font-black transition-all duration-300 ${activeLocale === lang.toLowerCase() ? 'bg-white/10 text-accent shadow-[0_0_15px_rgba(0,255,136,0.2)]' : 'text-white/20 hover:text-white/40'}`}
                 >
                   {lang}
                 </button>
               ))}
             </div>
 
-            <div className="h-10 w-px bg-white/5" />
+            <div className="hidden md:block h-10 w-px bg-white/5" />
 
             {/* Frame Count */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/5">
+            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/5">
               <span className="text-[10px] font-bold text-white/30 uppercase tracking-wide">Frames</span>
               <span className="text-sm font-black text-accent">{screenshots.length}</span>
             </div>
@@ -669,20 +680,22 @@ const App: React.FC = () => {
 
           <div className="flex items-center gap-4">
             {/* Zoom Controls */}
-            <ZoomControls
-              zoom={zoomLevel}
-              onZoomIn={handleZoomIn}
-              onZoomOut={handleZoomOut}
-              onZoomReset={handleZoomReset}
-            />
+            <div className="hidden md:block">
+              <ZoomControls
+                zoom={zoomLevel}
+                onZoomIn={handleZoomIn}
+                onZoomOut={handleZoomOut}
+                onZoomReset={handleZoomReset}
+              />
+            </div>
 
             {screenshots.length > 0 && (
               <button
                 onClick={addScreen}
-                className="px-8 py-3 bg-white/5 hover:bg-accent hover:text-obsidian rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/10 hover:border-accent transition-all shadow-xl active:scale-95 flex items-center gap-2"
+                className="px-4 md:px-8 py-2 md:py-3 bg-white/5 hover:bg-accent hover:text-obsidian rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest border border-white/10 hover:border-accent transition-all shadow-xl active:scale-95 flex items-center gap-2"
               >
                 <Icons.Plus className="w-4 h-4" />
-                Add Frame
+                <span className="hidden sm:inline">Add Frame</span>
               </button>
             )}
 

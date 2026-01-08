@@ -31,8 +31,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                 <div className="hero-content">
                     <div className="badge animate-fade-in">Version 5.0 is Here</div>
                     <h1 className="hero-title animate-slide-up">
-                        <span className="block whitespace-nowrap">Play Store & App Store</span>
-                        <span className="text-gradient block whitespace-nowrap">Screenshot Generator</span>
+                        <span className="block">Play Store & App Store</span>
+                        <span className="text-gradient block">Screenshot Generator</span>
                     </h1>
                     <p className="hero-subtitle animate-slide-up" style={{ animationDelay: '0.1s' }}>
                         Create stunning, professional app screenshots for Play Store, App Store, Android, and iOS in seconds.

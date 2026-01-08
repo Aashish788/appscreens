@@ -6,8 +6,8 @@ import { AIAnalysisResult } from "../types";
  * Advanced Neural Analysis: Detects brand essence and crafts a complex 3D panoramic scene.
  */
 export async function analyzeScreenshot(base64Image: string): Promise<AIAnalysisResult> {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: [
@@ -80,7 +80,7 @@ export async function analyzeScreenshot(base64Image: string): Promise<AIAnalysis
  * Elite 3D Image Engine: Produces distributed panoramic assets.
  */
 export async function generateAIBackground(prompt: string): Promise<string> {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash-image',
@@ -111,6 +111,6 @@ export async function generateAIBackground(prompt: string): Promise<string> {
       return `data:image/png;base64,${part.inlineData.data}`;
     }
   }
-  
+
   throw new Error("Neural Imaging system failed to return an asset.");
 }

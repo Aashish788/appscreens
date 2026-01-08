@@ -275,31 +275,31 @@ export const ExportSizeModal: React.FC<ExportSizeModalProps> = ({
 
             {/* Modal */}
             <div
-                className="relative w-full max-w-3xl max-h-[90vh] overflow-hidden bg-gradient-to-b from-obsidian-light via-obsidian-light to-obsidian rounded-[40px] border border-white/10 shadow-[0_60px_120px_-20px_rgba(0,0,0,0.9)] animate-in zoom-in-95 fade-in slide-in-from-bottom-4 duration-500"
+                className="relative w-full max-w-3xl max-h-[95vh] flex flex-col overflow-hidden bg-gradient-to-b from-obsidian-light via-obsidian-light to-obsidian rounded-[32px] md:rounded-[40px] border border-white/10 shadow-[0_60px_120px_-20px_rgba(0,0,0,0.9)] animate-in zoom-in-95 fade-in slide-in-from-bottom-4 duration-500"
                 onClick={e => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="p-8 border-b border-white/5 relative overflow-hidden">
+                <div className="p-6 md:p-8 border-b border-white/5 relative overflow-hidden shrink-0">
                     {/* Glow Effect */}
                     <div className="absolute -top-20 -left-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl pointer-events-none" />
                     <div className="absolute -top-10 right-20 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
                     <div className="relative flex items-start justify-between">
                         <div>
-                            <h2 className="text-2xl font-black tracking-tighter flex items-center gap-3">
+                            <h2 className="text-xl md:text-2xl font-black tracking-tighter flex items-center gap-3">
                                 <span className="text-accent italic drop-shadow-[0_0_20px_rgba(0,255,136,0.4)]">EXPORT</span>
                                 <span className="text-white/90">STUDIO</span>
-                                <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/30 text-[8px] font-black text-accent uppercase tracking-widest">PRO</span>
+                                <span className="hidden sm:inline px-3 py-1 rounded-full bg-accent/10 border border-accent/30 text-[8px] font-black text-accent uppercase tracking-widest">PRO</span>
                             </h2>
-                            <p className="text-[10px] text-white/30 font-bold uppercase tracking-[0.25em] mt-2">
-                                Device-Optimized Export Pipeline
+                            <p className="text-[9px] md:text-[10px] text-white/30 font-bold uppercase tracking-[0.25em] mt-2 leading-none">
+                                Device-Optimized Pipeline
                             </p>
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all"
+                            className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all"
                         >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
@@ -307,9 +307,9 @@ export const ExportSizeModal: React.FC<ExportSizeModalProps> = ({
                 </div>
 
                 {/* Content */}
-                <div className="p-8 overflow-y-auto max-h-[calc(90vh-280px)] scrollbar-hide">
+                <div className="p-6 md:p-8 overflow-y-auto flex-1 scrollbar-hide">
                     {/* Category Tabs */}
-                    <div className="flex gap-2 p-2 bg-white/5 rounded-2xl border border-white/5 mb-8">
+                    <div className="flex gap-2 p-1.5 bg-white/5 rounded-2xl border border-white/5 mb-8 overflow-x-auto scrollbar-hide">
                         {[
                             { id: 'ios', name: 'iOS', icon: '🍎' },
                             { id: 'android', name: 'Android', icon: '🤖' },
@@ -326,7 +326,7 @@ export const ExportSizeModal: React.FC<ExportSizeModalProps> = ({
                                     }
                                 }}
                                 className={`
-                  flex-1 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2
+                  flex-1 md:flex-none min-w-[120px] md:min-w-0 py-3 md:py-4 px-4 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 whitespace-nowrap
                   ${activeCategory === cat.id
                                         ? 'bg-accent/10 text-accent shadow-[0_0_30px_rgba(0,255,136,0.1)] border border-accent/30'
                                         : 'text-white/30 hover:text-white/50 hover:bg-white/5 border border-transparent'
@@ -334,14 +334,14 @@ export const ExportSizeModal: React.FC<ExportSizeModalProps> = ({
                 `}
                             >
                                 <span>{cat.icon}</span>
-                                <span>{cat.name}</span>
+                                <span className="md:inline">{cat.name}</span>
                             </button>
                         ))}
                     </div>
 
                     {/* Device Presets Grid */}
                     {activeCategory !== 'custom' ? (
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             {filteredPresets.map((preset) => (
                                 <button
                                     key={preset.id}
@@ -462,7 +462,7 @@ export const ExportSizeModal: React.FC<ExportSizeModalProps> = ({
                     {/* Quality Selection */}
                     <div className="mt-8 space-y-4">
                         <label className="text-[10px] text-white/40 font-bold uppercase tracking-widest block">Export Quality</label>
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             {[
                                 { id: 'standard', name: 'Standard', desc: '2x pixel ratio', icon: '⚡' },
                                 { id: 'high', name: 'High', desc: '3x pixel ratio', icon: '✨' },
@@ -491,7 +491,7 @@ export const ExportSizeModal: React.FC<ExportSizeModalProps> = ({
                 </div>
 
                 {/* Footer - Export Action */}
-                <div className="p-8 border-t border-white/5 bg-gradient-to-t from-obsidian to-transparent">
+                <div className="p-6 md:p-8 border-t border-white/5 bg-gradient-to-t from-obsidian to-transparent shrink-0">
                     {/* Resolution Preview */}
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-4">

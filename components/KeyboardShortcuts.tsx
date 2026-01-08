@@ -36,7 +36,7 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({ isOpen, on
             />
 
             {/* Modal */}
-            <div className="relative bg-obsidian-light/95 backdrop-blur-3xl border border-white/10 rounded-3xl p-8 w-full max-w-lg shadow-[0_60px_120px_-30px_rgba(0,0,0,0.9)] animate-in zoom-in-95 fade-in duration-300">
+            <div className="relative bg-obsidian-light/95 backdrop-blur-3xl border border-white/10 rounded-3xl p-6 md:p-8 w-[90%] md:w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-[0_60px_120px_-30px_rgba(0,0,0,0.9)] animate-in zoom-in-95 fade-in duration-300">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-3">

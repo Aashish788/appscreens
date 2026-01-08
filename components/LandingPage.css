@@ -30,12 +30,26 @@
 
 .nav-content {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+@media (max-width: 768px) {
+    .nav {
+        height: 70px;
+    }
+
+    .nav-content {
+        padding: 0 20px;
+    }
+
+    .nav-items {
+        display: none;
+    }
 }
 
 .logo {
@@ -111,6 +125,25 @@
 .hero-content {
     max-width: 900px;
     padding: 0 40px;
+    position: relative;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding-top: 140px;
+        padding-bottom: 120px;
+    }
+
+    .hero-content {
+        padding: 0 24px;
+    }
+
+    .badge {
+        font-size: 0.65rem;
+        padding: 6px 12px;
+        margin-bottom: 24px;
+    }
 }
 
 .badge {
@@ -142,6 +175,17 @@
     display: block;
 }
 
+@media (max-width: 768px) {
+    .hero-title {
+        margin-bottom: 24px;
+    }
+
+    .hero-title span {
+        white-space: normal !important;
+        display: inline;
+    }
+}
+
 /* Ensure two lines on desktop, allow wrap on very small mobile if needed */
 @media (min-width: 768px) {
     .hero-title span {
@@ -161,6 +205,21 @@
     display: flex;
     gap: 20px;
     justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .hero-cta {
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 20px;
+    }
+
+    .primary-cta,
+    .secondary-cta {
+        width: 100%;
+        padding: 16px 32px;
+        font-size: 0.9rem;
+    }
 }
 
 .primary-cta {
@@ -220,6 +279,20 @@
     flex-wrap: wrap;
 }
 
+@media (max-width: 768px) {
+    .trust {
+        padding: 60px 24px;
+    }
+
+    .logo-cloud {
+        gap: 40px;
+    }
+
+    .cloud-logo {
+        font-size: 1.1rem;
+    }
+}
+
 .cloud-logo {
     font-size: 1.5rem;
     font-weight: 900;
@@ -249,6 +322,18 @@
     border-radius: 32px;
     text-align: left;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+    .features-grid {
+        margin: 60px auto;
+        padding: 0 24px;
+    }
+
+    .feature-card {
+        padding: 32px;
+        border-radius: 24px;
+    }
 }
 
 .feature-card:hover {
@@ -296,6 +381,30 @@
 .footer-links {
     display: flex;
     gap: 100px;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 60px 24px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 40px;
+        text-align: center;
+    }
+
+    .footer-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-links {
+        gap: 40px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 }
 
 .link-group h4 {

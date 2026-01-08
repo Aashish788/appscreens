@@ -99,9 +99,11 @@ const ToastItem: React.FC<{ toast: ToastMessage; onRemove: (id: string) => void 
 
 export const ToastContainer: React.FC<ToastProps> = ({ toasts, onRemove }) => {
     return (
-        <div className="fixed bottom-6 right-6 z-[200] flex flex-col gap-3">
+        <div className="fixed bottom-6 right-6 left-6 md:left-auto z-[200] flex flex-col items-center md:items-end gap-3 pointer-events-none">
             {toasts.map((toast) => (
-                <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
+                <div key={toast.id} className="pointer-events-auto w-full max-w-sm">
+                    <ToastItem toast={toast} onRemove={onRemove} />
+                </div>
             ))}
         </div>
     );
