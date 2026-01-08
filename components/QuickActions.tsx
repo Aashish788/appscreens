@@ -23,7 +23,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
     return (
         <div
             className={`
-        absolute -top-16 left-1/2 -translate-x-1/2 z-50
+        absolute top-0 left-1/2 -translate-x-1/2 z-50
         flex items-center gap-2 px-3 py-2
         bg-obsidian-light/95 backdrop-blur-2xl
         border border-white/10 rounded-2xl

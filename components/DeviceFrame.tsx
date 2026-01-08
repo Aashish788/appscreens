@@ -226,6 +226,7 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({
                 className={`
           relative group select-none perspective-3000 cursor-pointer
           transition-all duration-500 ease-out shrink-0
+          pt-16 -mt-16
         `}
                 id={`screenshot-frame-${screenshot.id}`}
                 onClick={(e) => {
