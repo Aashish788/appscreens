@@ -116,7 +116,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div className="w-[380px] h-full bg-gradient-to-b from-obsidian-light via-obsidian-light to-obsidian border-r border-white/5 flex flex-col overflow-hidden shadow-[20px_0_60px_-15px_rgba(0,0,0,0.8)] z-50">
       {/* Premium Header with Glassmorphism */}
-      <div className="p-8 border-b border-white/5 bg-obsidian-light/80 backdrop-blur-3xl relative overflow-hidden">
+      <div className="p-8 border-b border-white/5 bg-obsidian-light/80 backdrop-blur-3xl relative">
         {/* Glow Effect */}
         <div className="absolute -top-20 -left-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl pointer-events-none" />
 

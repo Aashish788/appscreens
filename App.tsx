@@ -13,6 +13,9 @@ import { analyzeScreenshot, generateAIBackground } from './services/geminiServic
 import * as htmlToImage from 'html-to-image';
 import JSZip from 'jszip';
 import { LandingPage } from './components/LandingPage';
+import { AuthPage } from './components/Auth/AuthPage';
+import { UserMenu } from './components/Auth/UserMenu';
+import { useAuth } from './contexts/AuthContext';
 
 const INITIAL_STYLES: AppStyles = {
   primaryColor: '#00FF88',
@@ -76,7 +79,10 @@ const App: React.FC = () => {
     title: '',
   });
   const [showExportModal, setShowExportModal] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showAuthPage, setShowAuthPage] = useState(false);
+
+  // Supabase Auth
+  const { user, loading: authLoading, signOut } = useAuth();
 
   // Toast notifications
   const { toasts, toast, removeToast } = useToast();
@@ -403,8 +409,26 @@ const App: React.FC = () => {
     }
   };
 
-  if (!isLoggedIn) {
-    return <LandingPage onLogin={() => setIsLoggedIn(true)} />;
+  // Auth loading state
+  if (authLoading) {
+    return (
+      <div className="flex h-screen w-full bg-obsidian items-center justify-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-16 h-16 rounded-full border-2 border-white/10 border-t-accent animate-spin" />
+          <span className="text-white/40 text-sm font-medium tracking-wider">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show auth page if requested
+  if (showAuthPage && !user) {
+    return <AuthPage onSuccess={() => setShowAuthPage(false)} />;
+  }
+
+  // Show landing page if not logged in
+  if (!user) {
+    return <LandingPage onLogin={() => setShowAuthPage(true)} />;
   }
 
   return (
@@ -652,13 +676,18 @@ const App: React.FC = () => {
               onZoomReset={handleZoomReset}
             />
 
-            <button
-              onClick={addScreen}
-              className="px-8 py-3 bg-white/5 hover:bg-accent hover:text-obsidian rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/10 hover:border-accent transition-all shadow-xl active:scale-95 flex items-center gap-2"
-            >
-              <Icons.Plus />
-              Add Frame
-            </button>
+            {screenshots.length > 0 && (
+              <button
+                onClick={addScreen}
+                className="px-8 py-3 bg-white/5 hover:bg-accent hover:text-obsidian rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/10 hover:border-accent transition-all shadow-xl active:scale-95 flex items-center gap-2"
+              >
+                <Icons.Plus className="w-4 h-4" />
+                Add Frame
+              </button>
+            )}
+
+            {/* User Menu */}
+            <UserMenu />
           </div>
         </div>
 
@@ -763,36 +792,7 @@ const App: React.FC = () => {
           )}
         </div>
 
-        {/* Floating Controls Overlay - Enhanced */}
-        {screenshots.length > 0 && (
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-40">
-            <div className="bg-obsidian-light/95 backdrop-blur-3xl border border-white/10 rounded-full px-10 py-5 shadow-[0_40px_100px_rgba(0,0,0,0.9)] flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em]">
-              <div className="flex items-center gap-3">
-                <span className="text-white/20">ENGINE</span>
-                <span className="text-white">APPSCREEN_v5_PRO</span>
-              </div>
-              <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
-              <div className="flex items-center gap-3">
-                <span className="text-white/20">SCENE</span>
-                <span className="text-accent underline cursor-pointer">{styles.backgroundType === 'ai-generated' ? 'NEURAL_ACTIVE' : 'STATIC'}</span>
-              </div>
-              <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
-              <div className="flex items-center gap-3">
-                <span className="text-white/20">ZOOM</span>
-                <span className="text-white">{Math.round(zoomLevel * 100)}%</span>
-              </div>
-              <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
-              <button
-                onClick={handleExportBatch}
-                disabled={isExporting}
-                className="group flex items-center gap-3 text-accent hover:text-white transition-all disabled:opacity-50"
-              >
-                <Icons.ArrowDownTray />
-                {isExporting ? 'EXPORTING...' : 'EXPORT_4K_ZIP'}
-              </button>
-            </div>
-          </div>
-        )}
+
 
         {/* Keyboard Shortcut Hint */}
         <button
