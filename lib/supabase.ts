@@ -1,23 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Supabase Configuration
-// These MUST be set in your .env.local file:
-// VITE_SUPABASE_URL=...
-// VITE_SUPABASE_ANON_KEY=...
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-    const errorMsg = '❌ Supabase credentials missing! Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your environment variables.';
-    if (import.meta.env.DEV) {
-        console.error(errorMsg + ' Check your .env.local file.');
-    } else {
-        console.error(errorMsg + ' Check your hosting dashboard environment variables.');
-    }
-}
-
-
-
+// Supabase configuration
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://uwwakewvppdtdctejsjc.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_FSQB2y_f2fot3zpHk5agew_NogX9rNh';
 
 // Create the Supabase client with production-grade configuration
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
